@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"os"
 	"reflect"
 	"regexp"
 	"runtime"
@@ -1245,6 +1246,20 @@ func NotZero(t TestingT, i interface{}, msgAndArgs ...interface{}) bool {
 		return Fail(t, fmt.Sprintf("Should not be zero, but was %v", i), msgAndArgs...)
 	}
 	return true
+}
+
+// FileExists asserts that the filename passed represents an existing file.
+//
+//  assert.FileExists(t, "main.go")
+//
+// Returns whether the assertion was successful (true) or calls Fail.
+func FileExists(t TestingT, filename string, msgAndArgs ...interface{}) (bool, error) {
+	_, err := os.Lstat(filename)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 // JSONEq asserts that two JSON strings are equivalent.

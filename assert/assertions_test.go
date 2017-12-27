@@ -1384,6 +1384,20 @@ func TestBytesEqual(t *testing.T) {
 	}
 }
 
+func TestFileExists(t *testing.T) {
+	var cases = []string{"assertions.go", "assertions_test.go"}
+
+	for i, c := range cases {
+		res, _ := FileExists(t, c)
+		Equal(t, res, true, "case %d failed", i+1)
+	}
+}
+
+func TestFileExistsError(t *testing.T) {
+	_, err := FileExists(t, "fsociety.dat")
+	Error(t, err, "unable to find file \"fsociety.dat\" (lstat fsociety.dat: no such file or directory)")
+}
+
 func BenchmarkBytesEqual(b *testing.B) {
 	const size = 1024 * 8
 	s := make([]byte, size)
